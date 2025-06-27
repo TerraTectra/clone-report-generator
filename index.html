@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор рапортов Ударных Клонов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <!-- Главное меню -->
+        <div id="mainMenu">
+            <h1>Генератор рапортов Ударных Клонов</h1>
+            <div class="menu">
+                <button onclick="showForm('reprimand')">Выговор</button>
+                <button onclick="showForm('specialReport')">Спец-рапорт</button>
+                <button class="link-btn" onclick="window.open('https://sites.google.com/view/ct-yk/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0', '_blank')">Ссылка на устав</button>
+                <button class="link-btn" onclick="window.open('https://docs.google.com/document/d/1h69oEsdGYHNCOHm-lMEpuMlmJx6Ln4nFvrfmBww-PnA/edit?tab=t.0', '_blank')">Памятка УК</button>
+            </div>
+        </div>
+
+        <!-- Форма для выговора -->
+        <div id="reprimandForm" class="hidden">
+            <h1>Генератор выговора</h1>
+            
+            <div class="form-group">
+                <label for="reprimandReporter" class="required">#1. Докладывает:</label>
+                <div class="autocomplete">
+                    <input type="text" id="reprimandReporter" placeholder="(например, 7531 | VET | Жмых)" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="reprimandActivity" class="required">#2. Проведено:</label>
+                <input type="text" id="reprimandActivity" placeholder="(например, 30 отжиманий)" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="violator" class="required">#3. Нарушитель:</label>
+                <div class="autocomplete">
+                    <input type="text" id="violator" placeholder="Начните вводить имя (разделяйте через ';')" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="violation" class="required">#4. Нарушение:</label>
+                <input type="text" id="violation" placeholder="(например, ТБ1; 4 ЗП.)" required>
+            </div>
+            
+            <div class="form-group">
+                <label>#5. Доказательства:</label>
+                <input type="text" placeholder="Оставьте пустым" disabled>
+            </div>
+            
+            <button onclick="generateReprimand()">Сгенерировать и скопировать выговор</button>
+            <button class="back-btn" onclick="backToMenu()">Вернуться в меню</button>
+            
+            <div id="reprimandOutput"></div>
+        </div>
+
+        <!-- Форма для спец-рапорта -->
+        <div id="specialReportForm" class="hidden">
+            <h1>Генератор спец-рапорта</h1>
+            
+            <div class="form-group">
+                <label for="reporter" class="required">#1. Докладывает:</label>
+                <div class="autocomplete">
+                    <input type="text" id="reporter" placeholder="(например, 7531 | VET | Жмых)" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="activity" class="required">#2. Проведено:</label>
+                <select id="activity" onchange="updateWorkTypes()" required>
+                    <option value="">-- Выберите тип деятельности --</option>
+                    <option value="Осуществление охранной деятельности">Осуществление охранной деятельности</option>
+                    <option value="Контроль за проведением постовой деятельности">Контроль за проведением постовой деятельности</option>
+                    <option value="Контроль за проведением тренировочной деятельности">Контроль за проведением тренировочной деятельности</option>
+                    <option value="Проведение опроса на знание устава">Проведение опроса на знание устава</option>
+                    <option value="Контроль за проведением агитационной деятельности">Контроль за проведением агитационной деятельности</option>
+                    <option value="Осуществление привлечения к ответственности военнослужащего CT легиона">Осуществление привлечения к ответственности военнослужащего CT легиона</option>
+                    <option value="Контроль лекционной деятельности">Контроль лекционной деятельности</option>
+                    <option value="Дежурство на территории Кадетской">Дежурство на территории Кадетской</option>
+                    <option value="Осуществление тренировочной/лекционной деятельности">Осуществление тренировочной/лекционной деятельности</option>
+                    <option value="Проведение лекции по уставу">Проведение лекции по уставу</option>
+                    <option value="Проверка личного состава">Проверка личного состава</option>
+                    <option value="Осуществление задержания сотрудника УК">Осуществление задержания сотрудника УК</option>
+                    <option value="Обучение на должность кандидат/рекрут">Обучение на должность кандидат/рекрут</option>
+                    <option value="Повышение/понижение в должности">Повышение/понижение в должности</option>
+                    <option value="Присвоение специальных наград">Присвоение специальных наград</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="recipient" class="required">#3. Кому проведено:</label>
+                <div class="autocomplete">
+                    <input type="text" id="recipient" placeholder="Начните вводить имя (разделяйте через ';')" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="required">#4. Деятельность УК:</label>
+                <div id="workTypeDisplay" class="work-type-display">-- Выберите "Проведено" --</div>
+                <input type="hidden" id="workType" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rating">#5. Оценка:</label>
+                <input type="text" id="rating" placeholder="Необязательное поле (например, Без происшествий)">
+            </div>
+            
+            <div class="form-group">
+                <label>#6. Доказательства:</label>
+                <input type="text" placeholder="Оставьте пустым" disabled>
+            </div>
+            
+            <button onclick="generateReport()">Сгенерировать и скопировать рапорт</button>
+            <button class="back-btn" onclick="backToMenu()">Вернуться в меню</button>
+            
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
